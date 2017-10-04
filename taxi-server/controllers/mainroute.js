@@ -1,14 +1,17 @@
-var express = require('express'),
+const express = require('express'),
     router = express.Router();
-var config = require('../config');
-var app = express();
+const app = express();
 
 //URL's without tokens
+router.use('/',(request,response)=>{
+    response.send('response ');
+    response.end();
+});
 router.use('/', require('./login-routes'));
 router.use(function (req, res, next) {
 
     // check header or url parameters or post parameters for token
-    var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.cookies.AccessToken;
+    let token = req.body.token || req.query.token || req.headers['x-access-token'] || req.cookies.AccessToken;
     //console.log('the cookie for this request is' + req.cookies.AccessToken);
     // decode token
     if (token) {

@@ -1,31 +1,26 @@
-var express = require('express');
-var router = express.Router();
-var db = require('../helpers/database').mainBucket;
-var counter = { current: 0, total: 0 };
-var config = require('../config');
-var jwt = require('jsonwebtoken');
-var app = express();
-var logger = require('../helpers/logger');
-var appd = require("appdynamics");
-var decryption = require('../models/encodeDecode');
-var cbExit = require('../config').cbExit;
+const express = require('express');
+const router = express.Router();
+const db = require('../helpers/db').mainBucket;
+const config = require('../helpers/config');
+const app = express();
+const decryptor = require('../helpers/cryptor');
 
 app.set('superSecret', config.secret);
 
 router.post('/login', function (req, res) {
 
-    //var LgExit = appd.getTransaction(req);
+    //let LgExit = appd.getTransaction(req);
 
-    var currentUser = 'myproductInduct::user::ID::' + req.body.username;
+    let currentUser = 'myproductInduct::user::ID::' + req.body.username;
 
     //--------- This is the decrypting part ;)
-    var encodedPassword = req.body.password;
+    let encodedPassword = req.body.password;
 
-    var decrypted = decryption(encodedPassword, 'base64', 'utf8', 3);
+    let decrypted = decryptor(encodedPassword, 'base64', 'utf8', 3);
 
     //----- Hitting the lookup
 
-    //var etCall = LgExit.startExitCall(cbExit);
+    //let etCall = LgExit.startExitCall(cbExit);
     db.get(currentUser, function (error, userID) {
         if (error) {
             if (error.code == 13) {
@@ -39,14 +34,14 @@ router.post('/login', function (req, res) {
             }
         }
         else {
-            var userObj = userID.value;
-            var userName = userID.value.userName;
-            var password = userID.value.pass_word;
-            var roleID = userID.value.role_Id;
-            var isNewUser = userID.value.isNewUser;
-            var isUserLocked = userID.value.isUserLocked;
-            var preferredLang = userID.value.preferredLang;
-            //var isLoggedIn = userID.value.isLoggedIn;
+            let userObj = userID.value;
+            let userName = userID.value.userName;
+            let password = userID.value.pass_word;
+            let roleID = userID.value.role_Id;
+            let isNewUser = userID.value.isNewUser;
+            let isUserLocked = userID.value.isUserLocked;
+            let preferredLang = userID.value.preferredLang;
+            //let isLoggedIn = userID.value.isLoggedIn;
             console.log('Got USer Data :: ' + JSON.stringify(userID.value));
             db.get(roleID, function (error, role) {
                 if (error) {
@@ -55,11 +50,11 @@ router.post('/login', function (req, res) {
                 }
                 if (userName === req.body.username) {
                     if (password === decrypted && userObj.isUserLocked < 5) {
-                        var claims = {
+                        let claims = {
                             sub: req.body.username
                         };
-                        var token = jwt.sign(claims, app.get('superSecret'), {});
-                        var response = {
+                        let token = en
+                        let response = {
                             call: "response",
                             result: "success",
                             token: token,
@@ -77,7 +72,7 @@ router.post('/login', function (req, res) {
                                 errHandler(err);
                             } else {
                                 res.json(response);
-                                var loginLog = JSON.stringify(response);
+                                let loginLog = JSON.stringify(response);
                                 logger.info(loginLog);
                             }
                         })

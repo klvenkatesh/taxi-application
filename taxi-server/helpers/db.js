@@ -1,7 +1,6 @@
 'use strict';
+const couchbase = require('couchbase');
+const config = require('./config');
 
-var couchbase = require('couchbase');
-var config = require('../config');
-
-module.exports.mainBucket = (new couchbase.Cluster(config.couchbase.url))
+module.exports.mainBucket = (new couchbase.Cluster(config.couchbaseurl))
     .openBucket("default");

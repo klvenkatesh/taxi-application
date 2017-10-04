@@ -1,18 +1,19 @@
-var db = require('../helpers/database').mainBucket;
-var N1qlQuery = require('couchbase').N1qlQuery;
+const db = require('../helpers/db').mainBucket;
+const N1qlQuery = require('couchbase').N1qlQuery;
 
 
 function dbModel() { };
 
-dbModel.nQuery = function (queryString, positionParam, callback) {
-    var query = N1qlQuery.fromString(queryString);
-    logger.info('N1Ql Query :: ' + queryString, positionParam);
-    db.query(query, [positionParam], function (err, data) {
-        if (err) {
-            callback(err, null);
-            return;
-        }
-        callback(null, data);
+dbModel.nQuery = function (queryString, positionParamArray) {
+    let query = N1qlQuery.fromString(queryString);
+    logger.info('N1Ql Query :: ' + queryString, positionParamArray);
+    return new Promise((resolve,reject) =>{
+        db.query(query, positionParamArray, function (err, data) {
+            if (err) {
+                reject(err);
+            } else 
+            resolve(data);
+        });
     });
 };
 
