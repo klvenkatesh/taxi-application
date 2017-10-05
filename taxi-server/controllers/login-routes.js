@@ -1,26 +1,23 @@
 const express = require('express');
-const router = express.Router();
+
 const db = require('../helpers/db').mainBucket;
 const config = require('../helpers/config');
-const app = express();
+const constants = require('../helpers/constants');
 const decryptor = require('../helpers/cryptor');
+
+const router = express.Router();
+const app = express();
 
 app.set('superSecret', config.secret);
 
-router.post('/login', function (req, res) {
+router.get('/login', function (req, res) {
 
-    //let LgExit = appd.getTransaction(req);
+    let currentUser = constants.userKey + req.body.username;
 
-    let currentUser = 'myproductInduct::user::ID::' + req.body.username;
-
-    //--------- This is the decrypting part ;)
     let encodedPassword = req.body.password;
 
     let decrypted = decryptor(encodedPassword, 'base64', 'utf8', 3);
 
-    //----- Hitting the lookup
-
-    //let etCall = LgExit.startExitCall(cbExit);
     db.get(currentUser, function (error, userID) {
         if (error) {
             if (error.code == 13) {
@@ -99,7 +96,6 @@ router.post('/login', function (req, res) {
             });
         }
     });
-    // LgExit.endExitCall(etCall);
 });
 
 module.exports = router;

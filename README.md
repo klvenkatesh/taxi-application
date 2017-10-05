@@ -51,16 +51,13 @@ drivers list and even if they click, they should see “request no longer availa
   2complete)
 and which auto picked up
 > Once a request is picked up, all requests take 5 mins to complete
-Testing Environment:
-Please login to https://koding.com with the following credentials
-Create a free account here and share credentials.
-You shall deploy the app & db in this instance and give public urls to be used for evaluation.
 Attached:
   1. Queuing system overall Architecture
   2. Driver App Mockup
   3. Customer App Mockup
   4. Dashboard Mockup
 
+Once the above is developed. These are the features that should be following:
 Now extend the Backend to consider locations also
 1. Assume Autos are at 5 different locations
   a. Auto 1 is always at (1,1)

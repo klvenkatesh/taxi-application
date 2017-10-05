@@ -3,3 +3,4 @@ node_modules
 .idea
 coverage
 /myProductInduct_log.log
+.vscode/

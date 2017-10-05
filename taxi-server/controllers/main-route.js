@@ -4,7 +4,7 @@ const app = express();
 
 //URL's without tokens
 router.get('/', function (req, res, next) {
-    res.send('indexExpress');
+    res.send({test:'indexExpress'});
     res.end();
 });
 
